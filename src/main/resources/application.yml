@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: kafka-transactional-bug
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/bug_report"
+    username: root
+    password: root
+  jpa:
+    properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate.ddl-auto: update
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      transaction-id-prefix: tx-
+      properties:
+        enable.idempotence: true
+        acks: all
+        transactional.id: tran-id-1
+
+kafka:
+  topicName: "tx-topic"
