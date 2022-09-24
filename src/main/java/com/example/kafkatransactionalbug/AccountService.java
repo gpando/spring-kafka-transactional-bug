@@ -26,21 +26,12 @@ public class AccountService {
         return new Account(String.format("%s message [%s] [%s]", type, UUID.randomUUID().toString(), Instant.now().toString()));
     }
 
-    private void sendToKafka(String in) {
-
-        kafkaTemplate.send(topicName, in);
-    }
-
     private void doTask(String type) {
         Account account = createAccount(type);
 
-        System.out.println( "***doTask: before send to kafka");
-        sendToKafka(account.getName());
-        System.out.println( "***doTask: after send to kafka");
+        kafkaTemplate.send(topicName,account.getName());
         
-        System.out.println( "***doTask: before save db");
         repository.save(account);
-        System.out.println( "***doTask: after save db");
     }
 
     @Transactional("transactionManager")
